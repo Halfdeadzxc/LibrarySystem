@@ -1,3 +1,5 @@
+using Library.API.Middlewares;
+using Library.BLL;
 namespace Library.API
 {
     public class Program
@@ -6,17 +8,33 @@ namespace Library.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-
+            builder.Services.ConfigureBLL();
             builder.Services.AddControllers();
+
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1", new()
+                {
+                    Title = "Library API",
+                    Version = "v1",
+                    Description = "API для управления библиотекой"
+                });
+            });
+
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
 
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
+            app.UseMiddleware<ExceptionMiddleware>();
 
 
             app.MapControllers();
