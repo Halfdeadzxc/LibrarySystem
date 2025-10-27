@@ -9,5 +9,8 @@ namespace Library.BLL.Interfaces
         AuthorDto Create(AuthorDto dto);
         void Update(int id, AuthorDto dto);
         void Delete(int id);
+
+        public IEnumerable<AuthorDto> GetAuthorsWithBookCount();
+        public IEnumerable<AuthorDto> SearchAuthorsByName(string namePart);
     }
 }

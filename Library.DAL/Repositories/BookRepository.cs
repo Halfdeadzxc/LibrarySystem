@@ -1,29 +1,37 @@
 ﻿using Library.DAL.Interfaces;
 using Library.DAL.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Library.DAL.Repositories
 {
     public class BookRepository : IBookRepository
     {
-        private readonly List<Book> _books = [];
+        private readonly LibraryContext _context;
 
-        public IEnumerable<Book> GetAll() => _books;
+        public BookRepository(LibraryContext context)
+        {
+            _context = context;
+        }
 
-        public Book? GetById(int id) => _books.FirstOrDefault(b => b.Id == id);
+        public IEnumerable<Book> GetAll() =>
+            _context.Books.Include(b => b.Author).ToList();
+
+        public Book? GetById(int id) =>
+            _context.Books.Include(b => b.Author).FirstOrDefault(b => b.Id == id);
 
         public Book Create(Book book)
         {
             if (string.IsNullOrWhiteSpace(book.Title))
                 throw new ArgumentException("У книги нет названия");
 
-            book.Id = _books.Count > 0 ? _books.Max(b => b.Id) + 1 : 1;
-            _books.Add(book);
+            _context.Books.Add(book);
+            _context.SaveChanges();
             return book;
         }
 
         public void Update(int id, Book updated)
         {
-            var book = GetById(id);
+            var book = _context.Books.Find(id);
             if (book is null) return;
 
             if (string.IsNullOrWhiteSpace(updated.Title))
@@ -32,12 +40,17 @@ namespace Library.DAL.Repositories
             book.Title = updated.Title;
             book.PublishedYear = updated.PublishedYear;
             book.AuthorId = updated.AuthorId;
+            _context.SaveChanges();
         }
 
         public void Delete(int id)
         {
-            var book = GetById(id);
-            if (book is not null) _books.Remove(book);
+            var book = _context.Books.Find(id);
+            if (book is not null)
+            {
+                _context.Books.Remove(book);
+                _context.SaveChanges();
+            }
         }
     }
 }

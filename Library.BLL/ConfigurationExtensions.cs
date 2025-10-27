@@ -13,8 +13,8 @@ namespace Library.BLL
         {
             services.ConfigureDAL();
             services.AddAutoMapper(cfg => cfg.AddProfile<MappingProfile>());
-            services.AddSingleton<IAuthorService, AuthorService>();
-            services.AddSingleton<IBookService, BookService>();
+            services.AddScoped<IAuthorService, AuthorService>();
+            services.AddScoped<IBookService, BookService>();
         }
     }
 }

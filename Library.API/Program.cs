@@ -1,5 +1,8 @@
 using Library.API.Middlewares;
 using Library.BLL;
+using Library.DAL;
+using Microsoft.EntityFrameworkCore;
+
 namespace Library.API
 {
     public class Program
@@ -7,7 +10,7 @@ namespace Library.API
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
+            builder.Services.AddDbContext<LibraryContext>(options =>  options.UseSqlServer(builder.Configuration.GetConnectionString("Default")!));
             builder.Services.ConfigureBLL();
             builder.Services.AddControllers();
 

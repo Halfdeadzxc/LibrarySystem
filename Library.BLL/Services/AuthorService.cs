@@ -43,6 +43,27 @@ namespace Library.BLL.Services
 
         public void Delete(int id) => _repo.Delete(id);
 
+        public IEnumerable<AuthorDto> GetAuthorsWithBookCount()
+        {
+            return _repo.GetAll()
+                .Select(author => new AuthorDto
+                {
+                    Id = author.Id,
+                    Name = author.Name,
+                    DateOfBirth = author.DateOfBirth,
+                    BookCount = author.Books.Count,
+                });
+        }
+
+
+        public IEnumerable<AuthorDto> SearchAuthorsByName(string namePart)
+        {
+            return _repo.GetAll()
+                .Where(author =>
+                    author.Name.Contains(namePart, StringComparison.OrdinalIgnoreCase) ||
+                    author.Name.StartsWith(namePart, StringComparison.OrdinalIgnoreCase))
+                .Select(author => _mapper.Map<AuthorDto>(author));
+        }
         private static void Validate(AuthorDto dto)
         {
             var errors = new List<string>();

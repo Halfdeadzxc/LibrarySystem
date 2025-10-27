@@ -49,6 +49,14 @@ namespace Library.API.Controllers
             _service.Delete(id);
             return NoContent();
         }
+
+        [HttpGet("after/{year}")]
+        public ActionResult<IEnumerable<BookDto>> GetBooksPublishedAfter(int year)
+        {
+            var books = _service.GetBooksPublishedAfter(year);
+            return Ok(books);
+        }
+
     }
 
 }

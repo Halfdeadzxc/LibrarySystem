@@ -49,5 +49,20 @@ namespace Library.API.Controllers
             _service.Delete(id);
             return NoContent();
         }
+
+       
+        [HttpGet("with-book-count")]
+        public ActionResult<IEnumerable<AuthorDto>> GetAuthorsWithBookCount()
+        {
+            var authors = _service.GetAuthorsWithBookCount();
+            return Ok(authors);
+        }
+
+        [HttpGet("search")]
+        public ActionResult<IEnumerable<AuthorDto>> SearchAuthorsByName([FromQuery] string name)
+        {
+            var authors = _service.SearchAuthorsByName(name);
+            return Ok(authors);
+        }
     }
 }

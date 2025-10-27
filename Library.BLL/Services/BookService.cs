@@ -45,6 +45,14 @@ namespace Library.BLL.Services
 
         public void Delete(int id) => _repo.Delete(id);
 
+        public IEnumerable<BookDto> GetBooksPublishedAfter(int year)
+        {
+            return _repo.GetAll()
+                .Where(book => book.PublishedYear > year)
+                .Select(book => _mapper.Map<BookDto>(book));
+        }
+
+
         private static void Validate(BookDto dto)
         {
             var errors = new List<string>();

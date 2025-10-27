@@ -12,5 +12,6 @@ namespace Library.DAL.Models
         public string Title { get; set; } = string.Empty;
         public int PublishedYear { get; set; }
         public int AuthorId { get; set; }
+        public Author Author { get; set; }
     }
 }

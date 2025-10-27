@@ -10,6 +10,8 @@ namespace Library.BLL.Interfaces
         void Update(int id, BookDto dto);
         void Delete(int id);
 
+        public IEnumerable<BookDto> GetBooksPublishedAfter(int year);
+
     }
 
 }
